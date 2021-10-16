@@ -162,13 +162,157 @@ graph TD
   * Your JVM-based programs (using plain JAR distributions from [Maven Central](https://search.maven.org/search?q=g:org.eclipse.epsilon))
   * Your [Ant](https://www.eclipse.org/epsilon/doc/workflow/)/[Maven](https://www.eclipse.org/epsilon/doc/articles/running-epsilon-ant-tasks-from-command-line/#maven)/[Gradle](https://www.eclipse.org/epsilon/doc/articles/running-epsilon-ant-tasks-from-command-line/#gradle) build processes
 
-# Hands-on execises
+# Hands-on exercises: Epsilon Object Language (EOL)
 
-## Scripting models with EOL
+## First steps
 
-## Model-to-model transformations with ETL
+* We'll start with EOL, the base for all other Epsilon languages: it provides imperative code blocks, modularity, and expressions
+* Please open the [Epsilon Playground](https://www.eclipse.org/epsilon/live){target="_blank"}
+* Select the "Query Project Plan" example project
 
-## Model-to-text transformations with EGL
+## Playground UI for sample EOL project
+
+![](img/playground-ui.png)
+
+## Metamodel for sample EOL project
+
+:::::::::::::: {.columns}
+
+::: {.column width="30%" align=center}
+
+![](img/emfatic-metamodel.png)
+
+:::
+::: {.column width="70%" align=center}
+
+* Playground uses [Emfatic](https://www.eclipse.org/emfatic/) as concrete syntax for metamodels
+* Metamodel describes a task tracking domain-specific modeling language (DSML):
+  * Projects have title + description, contain 0+ tasks and people
+  * Tasks have title + start + duration, contain effort assignments
+  * People have names
+  * An effort assignment has percentage, refers to a person
+
+:::
+::::::::::::::
+
+## Model for sample EOL project
+
+![](img/flexmi-model.png)
+
+* Playground uses "fuzzy" [Flexmi XML](https://www.eclipse.org/epsilon/doc/flexmi/) for models
+* Alice and Bob work across 3 tasks (analysis, design, and implementation)
+
+## First bit of EOL code!
+
+* Replace the "Program" with this, and click on ![](img/eol-run.png){style="margin: 0px;"}:
+
+   ```js
+   Task.all.first.title.println();
+   ```
+
+* `Type.all` = collection of all `Type` instances
+* All collections support [a number of operations](https://www.eclipse.org/epsilon/doc/eol/#collections-and-maps): `first` returns the first element
+* `println()` is one operation supported by [any value](https://www.eclipse.org/epsilon/doc/eol/#types): you can also provide a string as a prefix (e.g. `"title: "`)
+
+## Looping with for
+
+* A "foreach" loop in EOL is done as follows:
+  ```js
+  for (element in collection) {
+    /* code */
+  }
+  ```
+* Change the code to print the title of all tasks
+
+::: notes
+
+```js
+for (t in Task.all) {
+  t.title.println('title: ');
+}
+```
+
+:::
+
+## First-order operations
+
+* Show only the tasks longer than 3 days
+* Two approaches:
+  * `if` inside the `for` loop (as in C / JavaScript)
+  * Use `collection.select(e | condition)`
+* EOL collections have other useful ["first-order operations"](https://www.eclipse.org/epsilon/doc/eol/#collections-and-maps) like `select`, replacing many loops:
+  * Closures, key-value mappings, first match
+  * Universal/existential quantifiers
+  * Sorting by expression, etc.
+
+::: notes
+
+```js
+for (t in Task.all.select(e | e.duration > 3)) {
+  t.title.println('title: ');
+}
+```
+
+:::
+
+## Context operations
+
+* Let's refactor the idea of "large task" to a *context operation*: place it at the end of "Program".
+  ```js
+  operation Task isLarge(threshold) {
+    return self.duration > threshold;
+  }
+  ```
+* Now you can do `t.isLarge(3)` if `t` is a `Task`
+* It's useful to create a library of operations for your DSML, which you can reuse from any Epsilon script by using the `import` statement.
+
+::: notes
+
+```js
+for (t in Task.all.select(e | e.isLarge(3))) {
+  t.title.println('title: ');
+}
+
+operation Task isLarge(threshold) {
+  return self.duration > threshold;
+}
+```
+
+:::
+
+## In-place transformations
+
+* EOL is often used for small imperative in-place model transformations
+* For instance, if we want to add a new person:
+  ```js
+  var p = new Person;
+  p.name = "Charlie";
+  Project.all.first.people.add(p);
+  ```
+* Try adding a "Testing" task taking 4 days before your `for` loop: it should appear in the output
+
+::: notes
+
+```js
+var t = new Task;
+t.title = "Testing";
+t.duration = 4;
+Project.all.first.tasks.add(t);
+
+for (t in Task.all.select(e | e.isLarge(3))) {
+  t.title.println('title: ');
+}
+
+operation Task isLarge(threshold) {
+  return self.duration > threshold;
+}
+```
+
+:::
+
+# Hands-on exercises: Epsilon Transformation Language (ETL)
+
+# Walkthrough: Epsilon Generation Language (EGL)
 
 # Conclusion
 
