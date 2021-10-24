@@ -4,7 +4,7 @@ author: Antonio Garcia-Dominguez
 date: October 26, 2021
 include-before-slides: |
   <div class="footer">
-    Epsilon MDENet Training - Antonio García-Domínguez (Aston University) - <a href="https://twitter.com/antoniogado">@antoniogado</a>
+    Epsilon MDENet Training - Antonio García-Domínguez (Aston University) - <a href="https://twitter.com/antoniogado">@antoniogado</a> / a.garcia-dominguez AT aston DOT ac DOT uk
   </div>
 header-includes: |
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
