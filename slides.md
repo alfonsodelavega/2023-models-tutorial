@@ -312,9 +312,192 @@ operation Task isLarge(threshold) {
 
 # Hands-on exercises: Epsilon Transformation Language (ETL)
 
+## Model-to-model transformations {.diagram-slide}
+
+<div>
+<span class="diagram-data" style="display: none;">
+flowchart TD;
+  subgraph "1. Develop transformation";
+    MM1[Source Metamodel] -->|specifies concepts in| ML1[Source Modeling Language];
+    MM2[Target Metamodel] -->|specifies concepts in| ML2[Target Modeling Language];
+    ETLP[ETL rule] -->|from type in| MM1;
+    ETLP -->|to types in| MM2;
+  end;
+  subgraph "2. Run transformation";
+    ETLE[ETL execution] -->|from elements in| M1;
+    ML1 --->|used to specify| M1[Source Model];
+    ML2 --->|used to specify| M2[Target Model];
+    ETLE -->|populates| M2;
+  end;
+</span>
+<div class="diagram-display" style="min-height: 600px;"></div>
+</div>
+
+## First steps with ETL
+
+* We will work on transforming a tree model into a graph model, step by step.
+* Open the "Transform Tree to Graph" sample project in the Playground.
+
+## Playground UI for sample ETL project
+
+![](img/playground-ui-etl.png){ width=90% }
+
+## Creating our first rule
+
+* Replace the contents of "Transformation" with this, and click on ![](img/eol-run.png){style="margin: 0px;"}:
+
+```js
+rule Tree2Graph
+  transform t: Source!Tree
+  to g: Target!Graph {
+
+}
+```
+
+* `Source!Tree`: `Tree` type in source metamodel
+* `Target!Graph`: `Graph` type in target metamodel
+* We get four `Graph`s (one per `Tree`)
+
+## Adding a guard
+
+* We only want the `Graph` from the root `Tree`
+* We can set a condition as a *guard* for the rule
+
+```js
+rule Tree2Graph
+  transform t: Source!Tree
+  to g: Target!Graph {
+  guard: t.parent.isUndefined()
+}
+```
+
+* Alternatively, the guard can be a block of EOL code returning a Boolean value
+
+## Adding the name
+
+* Besides a guard, the body of a rule can have arbitrary EOL code: loops, variables, etc.
+* Can you set the name of the `Graph` to the label of the `Tree`?
+
+. . .
+
+```js
+rule Tree2Graph
+  transform t: Source!Tree
+  to g: Target!Graph {
+  guard: t.parent.isUndefined()
+  g.name = t.label;
+}
+```
+
+## Mapping trees to nodes
+
+* Try adding a rule that:
+  * Produces `Node`s from `Tree`s which have a parent
+  * Sets the `name` of the `Node` to the `label` of the `Tree`
+
+. . .
+
+The rule would look like this:
+
+```js
+rule Tree2Node
+  transform t: Source!Tree
+  to n: Target!Node {
+  guard: t.parent.isDefined()
+  n.name = t.label;
+}
+```
+
+## Adding the nodes to the Graph
+
+* Extend `Tree2Node` to add the new `Node` to the `nodes` of the `Graph`:
+  1. Fetch the only `Target!Graph`
+  1. Access its `nodes`
+  1. `add()` the `Node`
+
+. . .
+
+```js
+rule Tree2Node
+  transform t: Source!Tree
+  to n: Target!Node {
+  n.name = t.label;
+  Target!Graph.all.first.nodes.add(n);
+}
+```
+
+::: notes
+
+Tree2Node can be placed anywhere in the ETL script, because in the absence of any lazy rules, ETL uses a "fast" transformation strategy where all the target elements are created first (while checking guards), and *then* the bodies of the rules are run.
+
+:::
+
+## Adding child edges with equivalent()
+
+* Next, we want to link the new `Node` to all its children: this requires knowing the `Node`s that were produced from the child `Tree`s
+* ETL has the `t.equivalent()` operation for this: called on a `Tree t`, it will return the first element produced from it
+
+Try extending the `Tree2Node` rule to do this.
+
+## Adding parent edges: extended rule
+
+```js
+rule Tree2Node
+  transform t: Source!Tree
+  to n: Target!Node {
+  guard: t.parent.isDefined()
+  n.name = t.label;
+
+  var g = Target!Graph.all.first;
+  g.nodes.add(n);
+
+  for (c in t.children) {
+    var e = new Target!Edge;
+    e.source = n;
+    e.target = c.equivalent();
+
+    g.edges.add(e);
+  }
+}
+```
+
+## There is more to ETL!
+
+We haven't touched on quite a few things:
+
+* Rule scheduling: `@primary` / `@lazy` / `@greedy`
+* Rule inheritance and overriding
+* The `::=` operator
+* Persistence and use of transformation traces
+
 # Walkthrough: Epsilon Generation Language (EGL)
 
+## What is EGL for?
+
+* EGL implements model-to-text transformations: we can produce code, reports, images (e.g. using [Graphviz](https://graphviz.org/)) from a model
+* EGL is a templating language, in the style of [Twig](https://twig.symfony.com/), [Jinja](https://jinja.palletsprojects.com/en/3.0.x/), or raw PHP
+* The Playground visualisations and the [Picto tool](https://www.eclipse.org/epsilon/doc/picto/) are based on EGL
+
+## Demo time in the Playground
+
+Let's take a look at "Generate Effort Table":
+
+![](img/playground-ui-egl.png){ width=80% }
+
+## Other EGL features
+
+* Protected regions, which can be customized by develoeprs and kept across regenerations
+* Formatters, i.e. for automatically indenting code according to style guidelines
+* Coordination through the [EGX](https://www.eclipse.org/epsilon/doc/egx/) language, for producing multiple files
+
 # Conclusion
+
+## Session recap { .overview }
+
+![](img/overview-1-epsilon.png)
+![](img/overview-2-eol.png)
+![](img/overview-3-etl.png)
+![](img/overview-4-egl.png)
 
 ## Thank you!
 

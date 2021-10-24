@@ -41,10 +41,10 @@ $for(include-before)$
 $include-before$
 $endfor$
   <div class="reveal">
+    <div class="slides">
 $for(include-before-slides)$
 $include-before-slides$
 $endfor$
-    <div class="slides">
 $if(title)$
 <section id="$idprefix$title-slide"$for(title-slide-attributes/pairs)$ $it.key$="$it.value$"$endfor$>
   <h1 class="title">$title$</h1>

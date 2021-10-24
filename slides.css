@@ -16,11 +16,18 @@
 
 .reveal .footer {
   position:  absolute;
-  bottom:  1em;
-  left:  1em;
-  font-size: 0.5em;
+  bottom:  0em;
+  left:  0em;
+  font-size: 0.25em;
 }
 
 .reveal .column[data-align="center"] {
   vertical-align: middle;
+}
+
+.reveal .overview img {
+  border: solid 1px;
+  margin:  .25em;
+  width: 35%;
+  padding: .25em;
 }
