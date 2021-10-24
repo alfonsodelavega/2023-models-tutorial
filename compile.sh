@@ -10,7 +10,7 @@ compile() {
     -V revealjs-url=./reveal.js \
     --css slides.css \
     --highlight-style zenburn \
-    -o slides.html
+    -o index.html
 }
 
 while compile; do
