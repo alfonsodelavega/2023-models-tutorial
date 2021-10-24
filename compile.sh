@@ -1,10 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
 PANDOC_VERSION=2.14
 
-pandoc() {
+pandoc_docker() {
   docker run --rm \
     --volume "`pwd`:/data" \
     --user `id -u`:`id -g` \
@@ -12,7 +12,7 @@ pandoc() {
 }
 
 compile() {
-  pandoc -t revealjs -s slides.md \
+  $PANDOC -t revealjs -s slides.md \
     -f markdown-markdown_in_html_blocks-native_divs \
     --template=custom.revealjs \
     -V theme=night \
@@ -22,7 +22,30 @@ compile() {
     -o index.html
 }
 
-if test "$#" -eq 1; then
+usage() {
+  echo "Usage: $0 [-o: run once] [-s: use system pandoc command]" 1>&2
+  exit 1
+}
+
+LOOP=1
+PANDOC=pandoc_docker
+while getopts ":os" opt; do
+  case "${opt}" in
+    o)
+      LOOP=0
+      ;;
+    s)
+      echo "Using 'pandoc' system command"
+      PANDOC=pandoc
+      ;;
+    *)
+      usage
+      ;;
+  esac
+done
+shift $((OPTIND - 1))
+
+if test "$LOOP" -eq 0; then
   compile
 else
   while compile; do

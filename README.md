@@ -2,6 +2,38 @@
 
 These are the slides for the first training event in the [MDE-Net EPSRC expert network](https://www.mde-network.org/).
 
+## Prerequisites
+
 In order to compile the slides, you will need to install [Docker](https://docs.docker.com/get-docker/).
 
-You can then use `./compile.sh` to automatically compile them every time the `slides.md` file changes, or use `./compile.sh once` to compile the slides and immediately exit.
+If you want to have the slides automatically recompile when the `slides.md` or `slides.css` files change, you will also need to install `inotify-tools` (Linux-specific):
+
+```shell
+sudo apt-get install inotify-tools
+```
+
+## Compilation
+
+To compile the slides continuously using Docker, use:
+
+```shell
+./compile.sh
+```
+
+To compile the slides continuously using a local installation of [Pandoc](https://pandoc.org/), use:
+
+```shell
+./compile.sh -s
+```
+
+To compile the slides once using Docker, use:
+
+```shell
+./compile.sh -o
+```
+
+To compile the slides once using a local installation of Pandoc, use:
+
+```shell
+./compile.sh -os
+```
