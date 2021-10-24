@@ -19,6 +19,8 @@ compile() {
     -V revealjs-url=./reveal.js \
     --css slides.css \
     --highlight-style zenburn \
+    --syntax-definition eol.xml \
+    --syntax-definition etl.xml \
     -o index.html
 }
 
@@ -49,6 +51,6 @@ if test "$LOOP" -eq 0; then
   compile
 else
   while compile; do
-    inotifywait -e close_write slides.md slides.css
+    inotifywait -e close_write slides.md slides.css *.xml
   done
 fi

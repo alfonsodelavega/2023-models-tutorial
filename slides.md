@@ -206,7 +206,7 @@ graph TD
 
 * Replace the "Program" with this, and click on ![](img/eol-run.png){style="margin: 0px;"}:
 
-   ```js
+   ```eol
    Task.all.first.title.println();
    ```
 
@@ -217,7 +217,7 @@ graph TD
 ## Looping with for
 
 * A "foreach" loop in EOL is done as follows:
-  ```js
+  ```eol
   for (element in collection) {
     /* code */
   }
@@ -226,7 +226,7 @@ graph TD
 
 ::: notes
 
-```js
+```eol
 for (t in Task.all) {
   t.title.println('title: ');
 }
@@ -247,7 +247,7 @@ for (t in Task.all) {
 
 ::: notes
 
-```js
+```eol
 for (t in Task.all.select(e | e.duration > 3)) {
   t.title.println('title: ');
 }
@@ -258,7 +258,7 @@ for (t in Task.all.select(e | e.duration > 3)) {
 ## Context operations
 
 * Let's refactor the idea of "large task" to a *context operation*: place it at the end of "Program".
-  ```js
+  ```eol
   operation Task isLarge(threshold) {
     return self.duration > threshold;
   }
@@ -268,7 +268,7 @@ for (t in Task.all.select(e | e.duration > 3)) {
 
 ::: notes
 
-```js
+```eol
 for (t in Task.all.select(e | e.isLarge(3))) {
   t.title.println('title: ');
 }
@@ -284,7 +284,7 @@ operation Task isLarge(threshold) {
 
 * EOL is often used for small imperative in-place model transformations
 * For instance, if we want to add a new person:
-  ```js
+  ```eol
   var p = new Person;
   p.name = "Charlie";
   Project.all.first.people.add(p);
@@ -293,7 +293,7 @@ operation Task isLarge(threshold) {
 
 ::: notes
 
-```js
+```eol
 var t = new Task;
 t.title = "Testing";
 t.duration = 4;
@@ -346,7 +346,7 @@ flowchart TD;
 
 * Replace the contents of "Transformation" with this, and click on ![](img/eol-run.png){style="margin: 0px;"}:
 
-```js
+```etl
 rule Tree2Graph
   transform t: Source!Tree
   to g: Target!Graph {
@@ -363,7 +363,7 @@ rule Tree2Graph
 * We only want the `Graph` from the root `Tree`
 * We can set a condition as a *guard* for the rule
 
-```js
+```etl
 rule Tree2Graph
   transform t: Source!Tree
   to g: Target!Graph {
@@ -380,7 +380,7 @@ rule Tree2Graph
 
 . . .
 
-```js
+```etl
 rule Tree2Graph
   transform t: Source!Tree
   to g: Target!Graph {
@@ -399,7 +399,7 @@ rule Tree2Graph
 
 The rule would look like this:
 
-```js
+```etl
 rule Tree2Node
   transform t: Source!Tree
   to n: Target!Node {
@@ -417,7 +417,7 @@ rule Tree2Node
 
 . . .
 
-```js
+```etl
 rule Tree2Node
   transform t: Source!Tree
   to n: Target!Node {
@@ -441,7 +441,7 @@ Try extending the `Tree2Node` rule to do this.
 
 ## Adding parent edges: extended rule
 
-```js
+```etl
 rule Tree2Node
   transform t: Source!Tree
   to n: Target!Node {
