@@ -2,6 +2,15 @@
 
 set -e
 
+PANDOC_VERSION=2.14
+
+pandoc() {
+  docker run --rm \
+    --volume "`pwd`:/data" \
+    --user `id -u`:`id -g` \
+    "pandoc/core:$PANDOC_VERSION" "$@"
+}
+
 compile() {
   pandoc -t revealjs -s slides.md \
     -f markdown-markdown_in_html_blocks-native_divs \
@@ -13,6 +22,10 @@ compile() {
     -o index.html
 }
 
-while compile; do
-  inotifywait -e close_write slides.md slides.css
-done
+if test "$#" -eq 1; then
+  compile
+else
+  while compile; do
+    inotifywait -e close_write slides.md slides.css
+  done
+fi
