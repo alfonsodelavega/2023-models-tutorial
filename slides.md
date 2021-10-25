@@ -486,7 +486,7 @@ Let's take a look at "Generate Effort Table":
 
 ## Other EGL features
 
-* Protected regions, which can be customized by develoeprs and kept across regenerations
+* Protected regions, which can be customized by developers and kept across regenerations
 * Formatters, i.e. for automatically indenting code according to style guidelines
 * Coordination through the [EGX](https://www.eclipse.org/epsilon/doc/egx/) language, for producing multiple files
 
