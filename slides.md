@@ -1,10 +1,10 @@
 ---
 title: Epsilon MDENet Training
-author: Antonio Garcia-Dominguez
-date: October 26, 2021
+author: Alfonso de la Vega, Antonio Garcia-Dominguez, Dimitris Kolovos
+date: MODELS 2023
 include-before-slides: |
   <div class="footer">
-    Epsilon MDENet Training - Antonio García-Domínguez (Aston University) - <a href="https://twitter.com/antoniogado">@antoniogado</a> / a.garcia-dominguez AT aston DOT ac DOT uk
+  alfonso.delavega@unican.es (Universidad de Cantabria); {a.garcia-dominguez, dimitris.kolovos}@york.ac.uk (University of York)
   </div>
 header-includes: |
   <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
@@ -14,24 +14,14 @@ include-before: |
 
 # Introduction
 
-## Who am I?
+## Outline
 
-* Lecturer in Computer Science at Aston University
-* Committer in [Eclipse Epsilon](https://eclipse.org/epsilon) since 2011
-* Used Epsilon for several approaches:
-  * Test design and generation
-  * Process-oriented website generation
-  * Self-adaptive system introspection
-  * Timetable optimisation and export/import
-
-## Session outline
-
-1. Basics: models, metamodels, etc.
-1. High-level view of the Epsilon project
 1. Exercises with the [Epsilon Playground](https://www.eclipse.org/epsilon/live/):
    * EOL: the base expression language
    * ETL: transform a model to another model
    * EGL: generate text from a model
+2. Contest along the exercises!
+3. Epsilon integration with existing codebases
 
 ## What is Model-Driven Engineering?
 
@@ -490,19 +480,8 @@ Let's take a look at "Generate Effort Table":
 * Formatters, i.e. for automatically indenting code according to style guidelines
 * Coordination through the [EGX](https://www.eclipse.org/epsilon/doc/egx/) language, for producing multiple files
 
-# Conclusion
+# Epsilon Integration with existing codebases (TBD)
 
-## Session recap { .overview }
-
-![](img/overview-1-epsilon.png)
-![](img/overview-2-eol.png)
-![](img/overview-3-etl.png)
-![](img/overview-4-egl.png)
+# Conclusions
 
 ## Thank you!
-
-Antonio Garcia-Dominguez
-
-a.garcia-dominguez AT aston.ac.uk
-
-[\@antoniogado](http://twitter.com/antoniogado)
